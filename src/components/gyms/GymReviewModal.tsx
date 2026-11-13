@@ -409,7 +409,7 @@ export default function GymReviewModal({
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
                     gym.gpsLocation?.latitude && gym.gpsLocation?.longitude
                       ? `${gym.gpsLocation.latitude},${gym.gpsLocation.longitude}`
-                      : `${gym.gymName || gym.name || ''} ${gym.address || ''} ${gym.city || ''}`
+                      : `${gym.gymName} ${gym.address || ''} ${gym.city || ''}`
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -444,7 +444,7 @@ export default function GymReviewModal({
               {/* Embedded Google Map */}
               <div className="w-full h-44 rounded-xl overflow-hidden border border-slate-200 relative bg-slate-100 mt-2">
                 <iframe
-                  title={`${gym.gymName || gym.name || 'Gym'} Location Map`}
+                  title={`${gym.gymName} Location Map`}
                   width="100%"
                   height="100%"
                   loading="lazy"
@@ -452,7 +452,7 @@ export default function GymReviewModal({
                   src={`https://maps.google.com/maps?q=${encodeURIComponent(
                     gym.gpsLocation?.latitude && gym.gpsLocation?.longitude
                       ? `${gym.gpsLocation.latitude},${gym.gpsLocation.longitude}`
-                      : `${gym.gymName || gym.name || ''} ${gym.address || ''} ${gym.city || ''}`
+                      : `${gym.gymName} ${gym.address || ''} ${gym.city || ''}`
                   )}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
                 />
               </div>

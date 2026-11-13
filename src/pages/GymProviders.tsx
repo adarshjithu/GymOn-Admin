@@ -140,19 +140,6 @@ export default function GymProviders() {
     }
   };
 
-  const handleApprove = async (id: string) => {
-    try {
-      const updated = await adminApi.approveProvider(id);
-      adminApi.addActivityLog('Approved Provider', `Approved ${updated.name}`);
-      setSelectedProvider(updated);
-      setFeedbackBanner(`Provider "${updated.name}" has been approved.`);
-      loadData();
-      setTimeout(() => setFeedbackBanner(null), 3500);
-    } catch (err: any) {
-      alert(err?.message || 'Failed to approve provider');
-    }
-  };
-
   const filteredProviders = (providers || []).filter((p) => {
     const q = searchQuery.toLowerCase();
     const matchSearch =
