@@ -27,9 +27,7 @@ import type {
   ActivityLogItem,
   GeneralSettings,
 } from '../types';
-
-const API_BASE_URL =
-  (import.meta as any).env?.VITE_DEV_BASE_URL || 'http://localhost:5000/api/v1';
+import { API_BASE_URL } from './baseUrl';
 
 // Local in-memory state initialized from mock data and updated on offline actions
 let localGyms: GymItem[] = (() => {
@@ -109,13 +107,22 @@ async function request<T>(
 ): Promise<T> {
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3500);
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+    const token =
+      localStorage.getItem('gymon_admin_token') ||
+      localStorage.getItem('admin_access_token');
+    const authHeaders: Record<string, string> = token
+      ? { Authorization: `Bearer ${token}` }
+      : {};
 
     const res = await fetch(`${API_BASE_URL}${endpoint}`, {
       ...options,
+      credentials: 'include',
       signal: controller.signal,
       headers: {
         'Content-Type': 'application/json',
+        ...authHeaders,
         ...(options?.headers || {}),
       },
     });
@@ -291,10 +298,10 @@ export const adminApi = {
     const gymsList: GymItem[] = Array.isArray(res)
       ? res
       : Array.isArray(res?.gyms)
-      ? res.gyms
-      : Array.isArray(res?.data)
-      ? res.data
-      : [];
+        ? res.gyms
+        : Array.isArray(res?.data)
+          ? res.data
+          : [];
 
     return {
       gyms: gymsList,
@@ -474,10 +481,10 @@ export const adminApi = {
     const rawList: any[] = Array.isArray(res)
       ? res
       : Array.isArray(res?.providers)
-      ? res.providers
-      : Array.isArray(res?.data)
-      ? res.data
-      : [];
+        ? res.providers
+        : Array.isArray(res?.data)
+          ? res.data
+          : [];
 
     const provList: ProviderItem[] = rawList.map((p) => {
       const isAct = p.isActive !== false;
@@ -668,10 +675,10 @@ export const adminApi = {
     const leadsList: LeadItem[] = Array.isArray(res)
       ? res
       : Array.isArray(res?.leads)
-      ? res.leads
-      : Array.isArray(res?.data)
-      ? res.data
-      : [];
+        ? res.leads
+        : Array.isArray(res?.data)
+          ? res.data
+          : [];
 
     return {
       leads: leadsList,
